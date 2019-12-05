@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const postRoutes = require('./routes/post');
 const authRoutes = require('./routes/auth');
@@ -22,6 +23,7 @@ mongoose.connection.on("error", err => {
 dotenv.config();
 app.use(morgan("dev"));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(expressValidator());
 app.use("/", postRoutes);
 app.use("/", authRoutes);
