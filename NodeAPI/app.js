@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const postRoutes = require('./routes/post');
@@ -18,6 +19,7 @@ mongoose.connection.on("error", err => {
 
 dotenv.config();
 app.use(morgan("dev"));
+app.use(bodyParser.json());
 app.use("/", postRoutes);
 
 const port =  process.env.PORT || 8080;
