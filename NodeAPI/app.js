@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
-//const postRoutes = require('./routes/post');
+const postRoutes = require('./routes/post');
 
 mongoose
 .connect(
@@ -18,7 +18,7 @@ mongoose.connection.on("error", err => {
 
 dotenv.config();
 app.use(morgan("dev"));
-//app.use("/", postRoutes);
+app.use("/", postRoutes);
 
 const port =  process.env.PORT || 8080;
 app.listen(port, () => {
