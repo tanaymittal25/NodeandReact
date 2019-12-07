@@ -18,4 +18,15 @@ exports.hasAuthorization = (req, res, next) => {
 		return res.status(403).json({
 			error: "User not authorized!"
 		});
-}
+};
+
+exports.allUsers = (req, res) => {
+	User.find((err, users) => {
+		if (err)
+			return res.status(400).json({
+				error: err
+			});
+
+		return res.json({ users });
+	}).select("name email created updated");
+};
