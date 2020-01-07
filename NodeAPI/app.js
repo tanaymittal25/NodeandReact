@@ -6,6 +6,7 @@ const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
+const cors = require('cors');
 
 const postRoutes = require('./routes/post');
 const authRoutes = require('./routes/auth');
@@ -27,6 +28,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
+app.use(cors());
 
 app.use("/", postRoutes);
 app.use("/", authRoutes);
