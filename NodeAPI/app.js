@@ -14,10 +14,10 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
-mongoose.connect(
-    'mongodb://tanayagarwal:Tanay2598@ds051841.mlab.com:51841/tanaynodeapi', 
-    {useNewUrlParser: true, useUnifiedTopology: true}
-    ).then(() => console.log(`Connected to DB`));
+mongoose.connect('mongodb://tanayagarwal:Tanay2598@ds051841.mlab.com:51841/tanaynodeapi', {
+        useNewUrlParser: true, 
+        useUnifiedTopology: true
+    }).then(() => console.log(`Connected to DB`));
 
 mongoose.connection.on("error", err => {
     console.log(`DB Error: ${err.message}`);
