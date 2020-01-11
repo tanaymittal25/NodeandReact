@@ -28,14 +28,17 @@ class Signup extends Component {
 
         this.signup(user)
             .then(data => {
-                if (data.error) this.setState({ error: data.error })
-                else this.setState({
-                    name: "",
-                    email: "",
-                    password: "",
-                    error: "",
-                    open: true
-                });
+                if (data.error) {
+                    this.setState({ error: data.error });
+                } else {
+                    this.setState({
+                        name: "",
+                        email: "",
+                        password: "",
+                        error: "",
+                        open: true
+                    });
+                }
             });
     };
 
