@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 
 class Signin extends Component {
 
@@ -7,12 +8,20 @@ class Signin extends Component {
         this.state = {
             email: "",
             password: "",
-            error: ""
+            error: "",
+            redirectUser: false
         }
     };
 
     handleChange = (name) => (event) => {
         this.setState({ [name]: event.target.value })
+    };
+
+    authenticate = (jwt, next) => {
+        if (typeof window !== "undefined") {
+            localStorage.setItem("jwt", JSON.stringify(jwt));
+            next();
+        }
     };
 
     clickLogin = event => {
@@ -21,16 +30,34 @@ class Signin extends Component {
         const user = {
             email,
             password
-        };
+        }
 
-        this.signinForm(user)
+        this.signin(user)
             .then(data => {
                 if (data.error) {
                     this.setState({ error: data.error });
                 } else {
-
+                    //authenticate
+                    this.authenticate(data, () => {
+                        this.setState({ redirectUser: true });
+                    });
                 }
             });
+    }
+
+    signin = (user) => {
+        return fetch("http://localhost:8080/signin", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+            .then(response => {
+                return response.json();
+            })
+            .catch(err => console.log(err));
     }
 
     signinForm = (email, password) => (
@@ -58,7 +85,12 @@ class Signin extends Component {
     )
 
     render() {
-        const { email, password, error } = this.state;
+        const { email, password, error, redirectUser } = this.state;
+
+        if (redirectUser) {
+            return <Redirect to='/' />
+        }
+
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Signin</h2>
