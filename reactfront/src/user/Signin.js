@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { signin, authenticate } from '../auth'
 
 class Signin extends Component {
 
@@ -18,13 +19,6 @@ class Signin extends Component {
         this.setState({ [name]: event.target.value })
     };
 
-    authenticate = (jwt, next) => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("jwt", JSON.stringify(jwt));
-            next();
-        }
-    };
-
     clickLogin = event => {
         event.preventDefault();
         this.setState({ loading: true });
@@ -34,37 +28,20 @@ class Signin extends Component {
             password
         }
 
-        this.signin(user)
-            .then(data => {
-                console.log(data);
-                if (data.error) {
-                    this.setState({ 
-                        error: data.error,
-                        loading: false  
-                    });
-                } else {
-                    //authenticate
-                    this.authenticate(data, () => {
-                        this.setState({ redirectUser: true });
-                    });
-                }
-            });
-    }
-
-    signin = (user) => {
-        return fetch("http://localhost:8180/signin", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        })
-            .then(response => {
-                console.log(response);
-                return response.json();
-            })
-            .catch(err => console.log(err));
+        signin(user).then(data => {
+            console.log(data);
+            if (data.error) {
+                this.setState({
+                    error: data.error,
+                    loading: false
+                });
+            } else {
+                //authenticate
+                authenticate(data, () => {
+                    this.setState({ redirectUser: true });
+                });
+            }
+        });
     }
 
     signinForm = (email, password) => (
@@ -104,7 +81,7 @@ class Signin extends Component {
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
                     {error}
                 </div>
-                
+
                 {
                     loading ? (
                         <div className="jumbotron text-center">

@@ -1,48 +1,26 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { signout, isAuthenticated } from '../auth'
 
 const isActive = (history, path) => {
 	if (history.location.pathname === path) return { color: "#ff9900" };
-	else return { color: "#ffffff" }; 
+	else return { color: "#ffffff" };
 }
-
-export const signout = (next) => {
-	if (typeof window !== "undefined") localStorage.removeItem("jwt");
-	next();
-	return fetch("http://localhost:8180/signout", {
-		method: "GET"
-	})
-		.then(response => {
-			console.log(response);
-			return response.json();
-		})
-		.catch(err => console.log(err));
-};
-
-export const isAuthenticated = () => {
-	if (typeof window == "undefined")
-		return false;
-
-	if (localStorage.getItem("jwt"))
-		return JSON.parse(localStorage.getItem("jwt"));
-	else
-		return false;
-};
 
 const Menu = ({ history }) => (
 	<div>
 		<ul className="nav nav-tabs bg-primary">
 			<li className="nav-item">
-				<Link className="nav-link" style={ isActive(history, '/') } to='/'> Home </Link>
+				<Link className="nav-link" style={isActive(history, '/')} to='/'> Home </Link>
 			</li>
 			{
 				!isAuthenticated() && (
 					<>
 						<li className="nav-item">
-							<Link className="nav-link" style={ isActive(history, '/signin') } to='/signin'> Sign In </Link>
+							<Link className="nav-link" style={isActive(history, '/signin')} to='/signin'> Sign In </Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link" style={ isActive(history, '/signup') } to='/signup'> Sign Up </Link>
+							<Link className="nav-link" style={isActive(history, '/signup')} to='/signup'> Sign Up </Link>
 						</li>
 					</>
 				)
@@ -51,25 +29,24 @@ const Menu = ({ history }) => (
 				isAuthenticated() && (
 					<>
 						<li className="nav-item">
-							<a 
-								className="nav-link" 
-								style={ isActive(history, '/signup'), { cursor: "pointer" } } 
-								onClick={() => signout(() => history.push('/'))} 
+							<a
+								className="nav-link"
+								style={isActive(history, '/signup'), { cursor: "pointer" }}
+								onClick={() => signout(() => history.push('/'))}
 							>
-								Sign Out 
+								Sign Out
 							</a>
 						</li>
 						<li className="nav-item">
-							<a className="nav-link">
-								{ isAuthenticated().user.name }
-							</a>
+							<Link className="nav-link" to={`/user/${isAuthenticated().user._id}`} style={{ color: "#ffffff" }}>
+								{`${isAuthenticated().user.name}'s Profile`}
+							</Link>
 						</li>
 					</>
 				)
 			}
-			
 		</ul>
-	</div>
+	</div >
 );
 
 export default withRouter(Menu);
