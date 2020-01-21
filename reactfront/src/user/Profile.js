@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { isAuthenticated } from '../auth';
 import { Redirect, Link } from 'react-router-dom';
 import { read } from './apiUser';
+import profilePhoto from '../images/profilePhoto.png';
 
 class Profile extends Component {
 
@@ -31,22 +32,35 @@ class Profile extends Component {
   }
 
   render() {
-    const {redirectUser, user} = this.state;
+    const { redirectUser, user } = this.state;
     if (redirectUser) return <Redirect to="/singin" />
     return (
       <div className="container">
+        <h2 className="mt-5 mb-5">
+          Profile
+            </h2>
         <div className="row">
           <div className="col-md-6">
-            <h2 className="mt-5 mb-5">
-              Profile
-            </h2>
-            <p>Hello {isAuthenticated().user.name}</p>
-            <p>{isAuthenticated().user.email}</p>
-            <p>{`Joined ${new Date(
-              user.created
-            ).toDateString()}`}</p>
+            <img
+              className="card-img-top"
+              src={profilePhoto}
+              alt={user.name}
+              style={{
+                width: '18vw',
+                height: '15vw',
+                objectFit: 'fill'
+              }}
+            />
+
           </div>
           <div className="col-md-6">
+            <div className="lead mt-5 ml-5">
+              <p>Hello {user.name}</p>
+              <p>{user.email}</p>
+              <p>{`Joined ${new Date(
+                user.created
+              ).toDateString()}`}</p>
+            </div>
             {isAuthenticated().user && user._id == isAuthenticated().user._id && (
               <div className="d-inline-block mt-5">
                 <Link

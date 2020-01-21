@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { list } from './apiUser';
+import { Link } from 'react-router-dom';
+import profilePhoto from '../images/profilePhoto.png';
 
 class Users extends Component {
 
@@ -19,7 +21,7 @@ class Users extends Component {
                     this.setState({ users: data });
                 }
             });
-    }   
+    }
 
     renderUser = (users) => (
         <div className="row">
@@ -28,7 +30,7 @@ class Users extends Component {
                     <div className="card col-md-4 mb-5">
                         <img
                             className="card-img-top"
-                            src="profilePhoto.png"
+                            src={profilePhoto}
                             alt={user.name}
                             style={{
                                 width: '18vw',
@@ -39,7 +41,7 @@ class Users extends Component {
                         <div className="card-body" key={i}>
                             <h5 className="card-title">{user.name}</h5>
                             <p className="card-text">{user.email}</p>
-                            <a href="#" className="btn btn-raised btn-sm btn-primary">View Profile</a>
+                            <Link to={`/user/${user._id}`} className="btn btn-raised btn-sm btn-primary">View Profile</Link>
                         </div>
                     </div>
                 ))
