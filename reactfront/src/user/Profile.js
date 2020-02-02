@@ -3,6 +3,7 @@ import { isAuthenticated } from '../auth';
 import { Redirect, Link } from 'react-router-dom';
 import { read } from './apiUser';
 import profilePhoto from '../images/profilePhoto.png';
+import DeleteUser from './DeleteUser';
 
 class Profile extends Component {
 
@@ -31,9 +32,14 @@ class Profile extends Component {
     this.init(userId);
   }
 
+  componentWillReceiveProps(props) {
+    const userId = props.match.params.userId;
+    this.init(userId);
+  }
+
   render() {
     const { redirectUser, user } = this.state;
-    if (redirectUser) return <Redirect to="/singin" />
+    if (redirectUser) return <Redirect to="/signin" />
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">
@@ -69,9 +75,7 @@ class Profile extends Component {
                 >
                   Edit Profile
                 </Link>
-                <button className="btn btn-raised btn-danger">
-                  Delete Profile
-                </button>
+                <DeleteUser />
               </div>
             )}
           </div>
